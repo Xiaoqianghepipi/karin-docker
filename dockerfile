@@ -38,7 +38,8 @@ RUN mkdir -p /app/fonts \
 	&& test -f /app/karin-project/package.json \
 	&& rm -rf /app/karin-project/@karinjs /app/karin-project/plugins \
 	&& ln -s /app/@karinjs /app/karin-project/@karinjs \
-	&& ln -s /app/plugins /app/karin-project/plugins
+	&& ln -s /app/plugins /app/karin-project/plugins \
+	&& ln -s /app/.env /app/karin-project/.env
 COPY start-karin.sh /app/start-karin.sh
 COPY health-check-karin.sh /app/health-check-karin.sh
 RUN chmod +x /app/start-karin.sh /app/health-check-karin.sh

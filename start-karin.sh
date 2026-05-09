@@ -18,18 +18,6 @@ if [ ! -L /app/karin-project/@karinjs ] || [ ! -L /app/karin-project/plugins ]; 
   exit 1
 fi
 
-# .env 应该是文件；如果检测到目录，通常是挂载类型错误，跳过 .env 文件同步但继续启动。
-if [ -d /app/.env ] || [ -d /app/karin-project/.env ]; then
-  echo '[Karin] 检测到 .env 为目录（可能是目录挂载），已跳过 .env 文件同步'
-else
-  if [ -f /app/.env ]; then
-    rm -f /app/karin-project/.env
-    ln -s /app/.env /app/karin-project/.env
-  elif [ -f /app/karin-project/.env ]; then
-    cp /app/karin-project/.env /app/.env
-  fi
-fi
-
 # 切换到真实项目目录并启动 Karin。
 cd /app/karin-project
 exec pnpm app
