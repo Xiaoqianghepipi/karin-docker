@@ -28,6 +28,7 @@ docker run -d \
 	--name karin \
 	-p 7777:7777 \
 	--restart unless-stopped \
+	-v /opt/karin/.env:/app/.env:rw \
 	-v /opt/karin/fonts:/app/fonts:ro \
 	-v /opt/karin/@karinjs:/app/@karinjs:rw \
 	-v /opt/karin/plugins:/app/plugins:rw \
@@ -40,6 +41,7 @@ Windows PowerShell 示例：
 docker run -d `
 	--name karin `
 	-p 7777:7777 `
+	-v D:/karin/.env:/app/.env:rw `
 	-v D:/karin/fonts:/app/fonts:ro `
 	-v D:/karin/@karinjs:/app/@karinjs:rw `
 	-v D:/karin/plugins:/app/plugins:rw `
@@ -52,7 +54,8 @@ docker run -d `
 - 容器监听 7777 端口
 - 请务必挂载 /app/@karinjs 与 /app/plugins 用于持久化数据
 - restart 策略建议使用 unless-stopped
-- 镜像内置了默认字体，除非你需要其他字体，否则 /app/fonts 目录可以不挂载
+- /app/fonts 目录用于挂载额外的字体文件，容器内字体文件夹为只读
+- .env 文件用于环境配置，需在宿主机提前创建
 
 ## 3. 使用 Docker Compose 部署（推荐）
 
@@ -66,6 +69,7 @@ services:
 		ports:
 			- "7777:7777"
 		volumes:
+			- /opt/karin/.env:/app/.env:rw
 			- /opt/karin/fonts:/app/fonts:ro
             - /opt/karin/@karinjs:/app/@karinjs:rw
             - /opt/karin/plugins:/app/plugins:rw
