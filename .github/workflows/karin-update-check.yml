@@ -1,0 +1,52 @@
+name: Check Karin Update
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-and-trigger:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest Karin CLI version from npm
+        id: latest
+        shell: bash
+        run: |
+          version="$(npm view @karinjs/cli version)"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Read recorded Karin CLI version
+        id: recorded
+        shell: bash
+        run: |
+          if [ -f .github/karin-cli-version.txt ]; then
+            version="$(tr -d '[:space:]' < .github/karin-cli-version.txt)"
+          else
+            version=""
+          fi
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Update recorded version file
+        if: steps.latest.outputs.version != steps.recorded.outputs.version
+        shell: bash
+        run: |
+          echo "${{ steps.latest.outputs.version }}" > .github/karin-cli-version.txt
+
+      - name: Commit and push changes
+        if: steps.latest.outputs.version != steps.recorded.outputs.version
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/karin-cli-version.txt
+          git commit -m "chore(ci): bump karin cli to ${{ steps.latest.outputs.version }}"
+          git push
