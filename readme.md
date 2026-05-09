@@ -55,7 +55,7 @@ docker run -d `
 - 请务必挂载 /app/@karinjs 与 /app/plugins 用于持久化数据
 - restart 策略建议使用 unless-stopped
 - /app/fonts 目录用于挂载额外的字体文件，容器内字体文件夹为只读
-- .env 文件用于环境配置，需在宿主机提前创建
+- .env 文件用于环境配置，设置webui密码等
 
 ## 3. 使用 Docker Compose 部署（推荐）
 
