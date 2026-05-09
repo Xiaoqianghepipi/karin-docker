@@ -34,6 +34,9 @@ RUN corepack enable \
 
 WORKDIR /app
 RUN mkdir -p /app/fonts
+COPY start-karin.sh /app/start-karin.sh
+COPY health-check-karin.sh /app/health-check-karin.sh
+RUN chmod +x /app/start-karin.sh /app/health-check-karin.sh
 
 # 运行时优先使用挂载到 /app 的 Karin 项目目录。
 # 启动逻辑放在 start-karin.sh 中
