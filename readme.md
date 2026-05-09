@@ -98,8 +98,8 @@ docker compose up -d
 本仓库已配置两个工作流：
 
 - .github/workflows/docker-build.yml：负责构建并推送 GHCR 镜像
-- .github/workflows/karin-update-check.yml：定时检查 npm 上 @karinjs/cli 是否更新
-- 当检测到新版本时，会自动更新 .github/karin-cli-version.txt 并提交
+- .github/workflows/karin-update-check.yml：定时检查 GitHub releases 上 Karin core 是否更新
+- 当检测到新版本时，会自动更新 .github/karin-core-version.txt 并提交
 - 该提交会触发 docker-build.yml 自动构建新镜像
 
 ## 6. 常见问题

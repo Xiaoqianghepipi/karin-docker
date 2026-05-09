@@ -17,14 +17,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get latest Karin CLI version from npm
+      - name: Get latest Karin core release version from GitHub
         id: latest
         shell: bash
         run: |
-          version="$(npm view @karinjs/core version)"
+          version=$(curl -s https://api.github.com/repos/KarinJS/Karin/releases | jq -r '.[] | select(.tag_name | startswith("core-v")) | .tag_name' | head -1 | sed 's/core-v//')
           echo "version=${version}" >> "$GITHUB_OUTPUT"
 
-      - name: Read recorded Karin CLI version
+      - name: Read recorded Karin core version
         id: recorded
         shell: bash
         run: |
