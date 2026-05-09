@@ -50,8 +50,9 @@ docker run -d `
 说明：
 
 - 容器监听 7777 端口
-- 请务必挂载 /app 用于持久化数据
+- 请务必挂载 /app/@karinjs 与 /app/plugins 用于持久化数据
 - restart 策略建议使用 unless-stopped
+- 镜像内置了默认字体，除非你需要其他字体，否则 /app/fonts 目录可以不挂载
 
 ## 3. 使用 Docker Compose 部署（推荐）
 
@@ -84,15 +85,6 @@ docker compose logs -f karin
 ```
 
 ## 4. 更新镜像
-
-docker run 方式：
-
-```bash
-docker pull ghcr.io/xiaoqianghepipi/karin-docker:<新版本号>
-docker stop karin
-docker rm karin
-docker run -d --name karin -p 7777:7777 -v /opt/karin-data:/app --restart unless-stopped ghcr.io/xiaoqianghepipi/karin-docker:<新版本号>
-```
 
 Docker Compose 方式：
 
