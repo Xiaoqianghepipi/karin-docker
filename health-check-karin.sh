@@ -6,7 +6,7 @@ node - <<'NODE'
 const ac = new AbortController()
 const timer = setTimeout(() => ac.abort(), 4000)
 
-# 只要接口返回可解析的 JSON 且 code 为 200，就认为容器健康。
+// 只要接口返回可解析的 JSON 且 code 为 200，就认为容器健康。
 fetch('http://127.0.0.1:7777', { signal: ac.signal })
   .then((res) => res.text())
   .then((text) => {

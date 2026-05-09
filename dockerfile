@@ -33,12 +33,16 @@ RUN corepack enable \
 	&& npm install -g @karinjs/cli@latest
 
 WORKDIR /app
-RUN mkdir -p /app/fonts
+RUN mkdir -p /app/fonts \
+	&& pnpm create karin -y \
+	&& test -f /app/karin-project/package.json \
+	&& rm -rf /app/karin-project/@karinjs /app/karin-project/plugins \
+	&& ln -s /app/@karinjs /app/karin-project/@karinjs \
+	&& ln -s /app/plugins /app/karin-project/plugins
 COPY start-karin.sh /app/start-karin.sh
 COPY health-check-karin.sh /app/health-check-karin.sh
 RUN chmod +x /app/start-karin.sh /app/health-check-karin.sh
 
-# 运行时优先使用挂载到 /app 的 Karin 项目目录。
-# 启动逻辑放在 start-karin.sh 中
+# Karin 环境在构建时完成初始化，运行时仅执行启动脚本。
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 CMD ["sh", "/app/health-check-karin.sh"]
 CMD ["sh", "/app/start-karin.sh"]
