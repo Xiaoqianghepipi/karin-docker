@@ -26,12 +26,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Read Karin CLI version
+      - name: Read Karin core version
         id: karin
         shell: bash
         run: |
-          if [ -f .github/karin-cli-version.txt ]; then
-            version="$(tr -d '[:space:]' < .github/karin-cli-version.txt)"
+          if [ -f .github/karin-core-version.txt ]; then
+            version="$(tr -d '[:space:]' < .github/karin-core-version.txt)"
           else
             version=""
           fi
