@@ -108,7 +108,11 @@ docker compose up -d
 - 检查服务器安全组/防火墙是否放行 7777
 - 用 docker logs karin 查看容器日志
 
-# 6. 原项目链接
+# 6. 其他
+
+- 镜像已经预装了ffmpeg和chromium，不需要手动安装
+
+# 7. 原项目链接
 
 - Karin 官方仓库：
  https://github.com/KarinJS/Karin
