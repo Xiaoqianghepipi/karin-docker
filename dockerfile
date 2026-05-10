@@ -42,7 +42,7 @@ RUN mkdir -p /app/fonts \
 	&& if [ -d /app/karin-project/plugins ]; then cp -a /app/karin-project/plugins /app/karin-template/plugins; fi \
 	&& if [ -f /app/karin-project/.env ]; then cp -a /app/karin-project/.env /app/karin-template/.env; fi \
 	&& mkdir -p /app/karin-data \
-	&& rm -rf /app/karin-project/@karinjs /app/karin-project/plugins /app/karin-project/.env \
+	&& rm -rf /app/karin-project/@karinjs /app/karin-project/plugins /app/karin-project/.env 
 COPY start-karin.sh /app/start-karin.sh
 COPY health-check-karin.sh /app/health-check-karin.sh
 RUN chmod +x /app/start-karin.sh /app/health-check-karin.sh
