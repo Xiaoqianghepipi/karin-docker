@@ -107,3 +107,11 @@ docker compose up -d
 - 检查 7777 端口是否映射
 - 检查服务器安全组/防火墙是否放行 7777
 - 用 docker logs karin 查看容器日志
+
+# 6. 原项目链接
+
+- Karin 官方仓库：
+ https://github.com/KarinJS/Karin
+
+- Karin 官方文档：
+ https://karinjs.com/
