@@ -1,8 +1,8 @@
-## Karin Docker 镜像使用说明
+# Karin Docker 镜像使用说明
 
 本仓库通过 GitHub Actions 自动构建并发布镜像到 GHCR。
 
-## 镜像地址
+# 镜像地址
 
 ```bash
 https://ghcr.io/xiaoqianghepipi/karin-docker
@@ -13,13 +13,15 @@ https://ghcr.io/xiaoqianghepipi/karin-docker
 - latest：默认分支最新构建（即最新 Karin-docker）
 - x.x.x：按 Karin 版本固定
 
-## 1. 拉取镜像
+# 1. 拉取镜像
 
 ```bash
 docker pull ghcr.io/xiaoqianghepipi/karin-docker:latest
 ```
 
-## 2. 使用 docker run 部署
+# 2. docker部署
+
+## 1.使用 Docker CLI 部署
 
 Linux 示例：
 
@@ -45,13 +47,7 @@ docker run -d `
 	ghcr.io/xiaoqianghepipi/karin-docker:<版本号>
 ```
 
-说明：
-
-- 容器监听 7777 端口
-- 请务必挂载 /app/karin-data 用于持久化数据
-- fonts 目录用于挂载额外的字体文件（可选）
-
-## 3. 使用 Docker Compose 部署（推荐）
+## 2. 使用 Docker Compose 部署（推荐）
 
 创建 compose.yaml：
 
@@ -68,6 +64,12 @@ services:
 		restart: unless-stopped
 ```
 
+说明：
+
+- 容器监听 7777 端口
+- 请务必挂载 /app/karin-data 用于持久化数据
+- fonts 目录用于挂载额外的字体文件（可选）
+
 启动：
 
 ```bash
@@ -80,7 +82,7 @@ docker compose up -d
 docker compose logs -f karin
 ```
 
-## 4. 更新镜像
+# 3. 更新镜像
 
 Docker Compose 方式：
 
@@ -89,7 +91,7 @@ docker compose pull
 docker compose up -d
 ```
 
-## 5. 自动构建与自动更新说明
+# 4. 自动构建与自动更新说明
 
 本仓库已配置两个工作流：
 
@@ -98,7 +100,7 @@ docker compose up -d
 - 当检测到新版本时，会自动更新 .github/karin-core-version.txt 并提交
 - 该提交会触发 docker-build.yml 自动构建新镜像
 
-## 6. 常见问题
+# 5. 常见问题
 
 启动后访问不到服务：
 
