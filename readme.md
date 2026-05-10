@@ -29,6 +29,7 @@ docker run -d \
 	-p 7777:7777 \
 	--restart unless-stopped \
 	-v /opt/karin/data:/app/karin-data:rw \
+	-v /home/karin/fonts:/app/fonts:ro \
 	ghcr.io/xiaoqianghepipi/karin-docker:<版本号>
 ```
 
@@ -39,6 +40,7 @@ docker run -d `
 	--name karin `
 	-p 7777:7777 `
 	-v D:/karin/data:/app/karin-data:rw `
+	-v D:/karin/fonts:/app/fonts:ro `
 	--restart unless-stopped `
 	ghcr.io/xiaoqianghepipi/karin-docker:<版本号>
 ```
@@ -47,8 +49,7 @@ docker run -d `
 
 - 容器监听 7777 端口
 - 请务必挂载 /app/karin-data 用于持久化数据
-- fonts 目录用于挂载额外的字体文件
-- .env 文件用于环境配置，设置webui密码等
+- fonts 目录用于挂载额外的字体文件（可选）
 
 ## 3. 使用 Docker Compose 部署（推荐）
 
@@ -63,6 +64,7 @@ services:
 			- "7777:7777"
 		volumes:
             - /opt/karin/data:/app/karin-data:rw
+			- /home/karin/fonts:/app/fonts:ro
 		restart: unless-stopped
 ```
 
