@@ -37,19 +37,12 @@ WORKDIR /app
 RUN mkdir -p /app/fonts \
 	&& pnpm create karin -y \
 	&& test -f /app/karin-project/package.json \
-	# 保存一份模板供运行时在挂载为空时填充
-	&& rm -rf /opt/karin-template || true \
-	&& cp -a /app/karin-project /opt/karin-template \
-	# 准备统一的数据目录，优先使用 /app/karin-data（可被宿主挂载覆盖）
+	&& mkdir -p /app/karin-template \
+	&& if [ -d /app/karin-project/@karinjs ]; then cp -a /app/karin-project/@karinjs /app/karin-template/@karinjs; fi \
+	&& if [ -d /app/karin-project/plugins ]; then cp -a /app/karin-project/plugins /app/karin-template/plugins; fi \
+	&& if [ -f /app/karin-project/.env ]; then cp -a /app/karin-project/.env /app/karin-template/.env; fi \
 	&& mkdir -p /app/karin-data \
-	&& cp -a /app/karin-project/. /app/karin-data/ \
-	# 在项目中创建指向统一数据目录的链接
-	&& rm -rf /app/karin-project/@karinjs /app/karin-project/plugins || true \
-	&& ln -s /app/karin-data/@karinjs /app/karin-project/@karinjs \
-	&& ln -s /app/karin-data/plugins /app/karin-project/plugins \
-	# 将 .env 放到统一数据目录并链接回项目
-	&& if [ -f /app/karin-project/.env ]; then mkdir -p /app/karin-data && mv /app/karin-project/.env /app/karin-data/.env; fi \
-	&& ln -sf /app/karin-data/.env /app/karin-project/.env
+	&& rm -rf /app/karin-project/@karinjs /app/karin-project/plugins /app/karin-project/.env \
 COPY start-karin.sh /app/start-karin.sh
 COPY health-check-karin.sh /app/health-check-karin.sh
 RUN chmod +x /app/start-karin.sh /app/health-check-karin.sh

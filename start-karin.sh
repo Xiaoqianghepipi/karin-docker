@@ -12,18 +12,32 @@ if [ -d "${EXTRA_FONT_DIR}" ]; then
   fc-cache -f "${EXTRA_FONT_DIR}" >/dev/null 2>&1 || true
 fi
 
-# 如果宿主机把 /app/karin-data 挂载进来且为空，使用镜像内的模板填充它。
-if [ -d /app/karin-data ] && [ -z "$(ls -A /app/karin-data 2>/dev/null)" ]; then
-  if [ -d /opt/karin-template ]; then
-    echo '[Karin] 填充 karim 数据目录 /app/karin-data from template'
-    cp -a /opt/karin-template/. /app/karin-data/
-  fi
+mkdir -p /app/karin-data
+
+# 先在启动时重建项目侧的三个链接，确保它们都指向 /app/karin-data。
+rm -rf /app/karin-project/@karinjs /app/karin-project/plugins /app/karin-project/.env
+ln -s /app/karin-data/@karinjs /app/karin-project/@karinjs
+ln -s /app/karin-data/plugins /app/karin-project/plugins
+ln -s /app/karin-data/.env /app/karin-project/.env
+
+# 链接完成后，如果目录为空，再应用模板（模板只包含 @karinjs、plugins、.env）。
+if [ -d /app/karin-template/@karinjs ] && { [ ! -d /app/karin-data/@karinjs ] || [ -z "$(ls -A /app/karin-data/@karinjs 2>/dev/null)" ]; }; then
+  mkdir -p /app/karin-data/@karinjs
+  cp -a /app/karin-template/@karinjs/. /app/karin-data/@karinjs/
 fi
 
-# 校验构建阶段建立的关键链接仍然存在。
-if [ ! -L /app/karin-project/@karinjs ] || [ ! -L /app/karin-project/plugins ]; then
-  echo '[Karin] 关键目录链接缺失，请检查挂载配置或重建镜像'
+if [ -d /app/karin-template/plugins ] && { [ ! -d /app/karin-data/plugins ] || [ -z "$(ls -A /app/karin-data/plugins 2>/dev/null)" ]; }; then
+  mkdir -p /app/karin-data/plugins
+  cp -a /app/karin-template/plugins/. /app/karin-data/plugins/
+fi
+
+if [ -d /app/karin-data/.env ]; then
+  echo '[Karin] /app/karin-data/.env 必须是文件，不能是目录'
   exit 1
+fi
+
+if [ ! -f /app/karin-data/.env ] && [ -f /app/karin-template/.env ]; then
+  cp /app/karin-template/.env /app/karin-data/.env
 fi
 
 # 切换到真实项目目录并启动 Karin。
