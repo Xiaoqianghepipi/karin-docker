@@ -4,6 +4,7 @@ FROM node:22-bookworm-slim
 ENV PNPM_HOME=/pnpm
 ENV PATH=${PNPM_HOME}:${PATH}
 ENV EXTRA_FONT_DIR=/app/fonts
+ENV NODE_OPTIONS=--max-old-space-size=1536
 
 # 构建运行环境
 RUN corepack enable \

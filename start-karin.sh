@@ -42,5 +42,8 @@ fi
 
 # 切换到真实项目目录并启动 Karin。
 cd /app/karin-project
+# 导出默认 Node 内存限制（可被外部覆盖）
+export NODE_OPTIONS=${NODE_OPTIONS:-"--max-old-space-size=1536"}
+
 # 直接启动；若启动失败则尝试强制修复环境（安装依赖并初始化），然后重试
 pnpm app || (echo '[Karin] 启动失败，尝试强制修复环境...' && pnpm install -f || true && npx karin init || true && exec pnpm app)

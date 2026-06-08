@@ -35,6 +35,22 @@ docker run -d \
 	ghcr.io/xiaoqianghepipi/karin-docker:<版本号>
 ```
 
+推荐（启用内存限制与共享内存）：
+
+```bash
+docker run -d \
+	--name karin \
+	-p 7777:7777 \
+	--restart unless-stopped \
+	--memory=2g \
+	--memory-swap=2g \
+	--shm-size=1g \
+	-e NODE_OPTIONS="--max-old-space-size=1536" \
+	-v /opt/karin/data:/app/karin-data:rw \
+	-v /home/karin/fonts:/app/fonts:ro \
+	ghcr.io/xiaoqianghepipi/karin-docker:<版本号>
+```
+
 Windows PowerShell 示例：
 
 ```powershell
@@ -63,6 +79,40 @@ services:
 			- /home/karin/fonts:/app/fonts:ro
 		restart: unless-stopped
 ```
+
+Compose 推荐（在 Compose v2/v1 文件格式下有效）：
+
+```yaml
+services:
+	karin:
+		image: ghcr.io/xiaoqianghepipi/karin-docker:<版本号>
+		container_name: karin
+		ports:
+			- "7777:7777"
+		volumes:
+			- /opt/karin/data:/app/karin-data:rw
+			- /home/karin/fonts:/app/fonts:ro
+		shm_size: 1g
+		environment:
+			- NODE_OPTIONS=--max-old-space-size=1536
+		deploy:
+			resources:
+				limits:
+					memory: 2g
+		restart: unless-stopped
+```
+
+说明：
+- `--memory`/`deploy.resources` 用于限制容器内存（示例值 2g，可按需调整）。
+- `--shm-size=1g` 避免 Chromium 因 /dev/shm 太小而退回磁盘，降低峰值和抖动。该选项必须在容器创建时设置。
+- `NODE_OPTIONS` 限制 Node 的 V8 堆大小，配合容器内存更稳定。
+
+注意：如果需要限制 swap 行为，可以使用 `docker update` 在容器运行时设置（示例）：
+
+```bash
+docker update --memory=2g --memory-swap=2g karin
+```
+该命令会把容器的内存总限制和 swap 行为设置为 2G（与 `--memory-swap=2g` 等价于禁用 swap）。
 
 说明：
 
