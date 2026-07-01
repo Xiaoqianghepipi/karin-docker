@@ -44,6 +44,8 @@ jobs:
       - name: Commit and push changes
         if: steps.latest.outputs.version != steps.recorded.outputs.version
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
